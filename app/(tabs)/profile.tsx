@@ -7,7 +7,7 @@ export default function ProfileScreen() {
   return (
     <View>
       <Text>This is your Profile!</Text>
-      <Link href={"/login"}/>
+      <Link href={"/login"} replace/>
     </View>
   );
 }

@@ -7,6 +7,7 @@ export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     'Lexend-Regular': require('../assets/fonts/Lexend-Regular.ttf'),
     'Lexend-Bold': require('../assets/fonts/Lexend-Bold.ttf'),
+    'DancingScript-Regular':require('../assets/fonts/DancingScript-Regular.ttf')
   });
 
   
@@ -20,10 +21,11 @@ export default function RootLayout() {
     <>
       <Stack>
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="signup"  options={{headerTransparent:true, headerTitle:''}}/>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
     </>
   );
 }

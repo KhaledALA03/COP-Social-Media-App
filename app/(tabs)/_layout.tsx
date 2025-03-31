@@ -4,25 +4,28 @@
 
   export default function TabLayout() {
     return (
-      <Tabs>
+      <Tabs       screenOptions={{
+        tabBarShowLabel: false,
+      }}>
         <Tabs.Screen
           name="index"
           options={{
             title: 'index',
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="home-outline" color={color} size={size} />
+              <Ionicons name="home-outline" color={color} size={30} />
             ),
           }}
         />
-        <Tabs.Screen
+        <Tabs.Screen  
           name="profile"
           options={{
             title: 'Profile',
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="person-outline" color={color} size={size} />
+              <Ionicons name="person-outline" color={color} size={30} />
             ),
           }}
         />
+        
       </Tabs>
     );
   }
