@@ -12,8 +12,44 @@ import Title from '@/app/components/UI/Title';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DismissKeyboard from '@/app/components/utils/DismissKeyboard';
 import AuthFooter from '@/app/components/UI/AuthFooter';
+import login from '@/app/login';
+import { ActivityIndicator } from 'react-native';
 
 export default function LoginScreen() {
+
+const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+async function loginHandler({ email, password }: { email: string; password: string }) {
+    setIsAuthenticating(true);
+    try {
+      const response = await login(email, password);
+      if (response.idToken) {
+        console.log("✅ Login successful:", response.email);
+        router.push('/(tabs)');
+      }else {
+        console.warn("Login failed: No token returned.");
+      }
+    } catch (error) {
+      console.log("Signup error:", error);
+  
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
+if (isAuthenticating) {
+  return <ActivityIndicator />;
+}
+
+  
+
+  if(isAuthenticating){
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
+
   return (
     <DismissKeyboard>
       <SafeAreaView style={styles.container}>
@@ -23,7 +59,7 @@ export default function LoginScreen() {
         <View style={styles.formContainer}>
           <Title />
           <Text style={styles.title}>Login to your account</Text>
-          <LoginForm />
+          <LoginForm onAuthenticate={loginHandler}/>
         </View>
 
         <AuthFooter />

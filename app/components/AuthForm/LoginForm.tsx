@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import AuthInput from '../UI/AuthInput'; 
-import { Link } from 'expo-router';
+import AuthInput from '../UI/AuthInput';
 import SubmitButton from '../UI/SubmitButton';
-import { router } from 'expo-router';
+
 interface LoginValues {
   email: string;
   password: string;
+}
+
+interface LoginFormProps {
+  onAuthenticate: (credentials: { email: string; password: string }) => void;
 }
 
 const validationSchema = Yup.object().shape({
@@ -20,29 +23,29 @@ const validationSchema = Yup.object().shape({
     .required('Password is required.'),
 });
 
-export default function LoginForm(){
+export default function LoginForm({ onAuthenticate }: LoginFormProps) {
   const initialValues: LoginValues = { email: '', password: '' };
 
   return (
-
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(
+      onSubmit={async (
         values: LoginValues,
         { setSubmitting }: FormikHelpers<LoginValues>
       ) => {
-        console.log('Form submitted:', values);
-        router.push('/(tabs)')
-    
-        setSubmitting(false);
+        try {
+          await onAuthenticate({ email: values.email, password: values.password });
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+      {({ handleChange, handleSubmit, values, errors, touched }) => (
         <View style={styles.container}>
           <AuthInput
             placeholder="Email"
-            icon="mail-outline" 
+            icon="mail-outline"
             value={values.email}
             onChangeText={handleChange('email')}
             keyboardType="email-address"
@@ -51,16 +54,14 @@ export default function LoginForm(){
 
           <AuthInput
             placeholder="Password"
-            icon="lock-closed-outline" 
+            icon="lock-closed-outline"
             value={values.password}
             onChangeText={handleChange('password')}
             secureTextEntry={true}
             errorMessage={touched.password && errors.password ? errors.password : undefined}
           />
 
-          <Link href="/signup" asChild>
-            <SubmitButton title="Login" onPress={handleSubmit as () => void} />
-          </Link>
+          <SubmitButton title="Login" onPress={handleSubmit as () => void} />
         </View>
       )}
     </Formik>
@@ -70,6 +71,6 @@ export default function LoginForm(){
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    flex:1,
+    flex: 1,
   },
 });

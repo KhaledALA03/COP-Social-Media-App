@@ -13,7 +13,9 @@ interface RegValues {
   password: string;
   confirmPassword: string;
 }
-
+interface RegFormProps {
+  onAuthenticate: (credentials: { email: string; password: string }) => void;
+}
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Please enter a valid email.')
@@ -27,7 +29,7 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Password is required.'),
 });
 
-export default function RegForm() {
+export default function RegForm({ onAuthenticate }: RegFormProps) {
   const initialValues: RegValues = {
     email: '',
     username: '',
@@ -39,16 +41,21 @@ export default function RegForm() {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(
+      onSubmit={async (
         values: RegValues,
         { setSubmitting }: FormikHelpers<RegValues>
       ) => {
-        console.log('Form submitted:', values);
-      
-        router.push('/(tabs)');
+        try {
+          await onAuthenticate({ email: values.email, password: values.password });
+        } catch (error) {
+          console.log("Auth failed:", error);
 
-        setSubmitting(false);
+        } finally {
+          setSubmitting(false);
+        }
       }}
+      
+      
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <View style={styles.container}>
@@ -89,9 +96,7 @@ export default function RegForm() {
             }
           />
 
-          <Link href="/signup" asChild>
-            <SubmitButton title="Register" onPress={handleSubmit as () => void} />
-          </Link>
+<SubmitButton title="Register" onPress={handleSubmit as () => void} />
         </View>
       )}
     </Formik>
