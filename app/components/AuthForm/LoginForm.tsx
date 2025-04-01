@@ -1,17 +1,15 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import AuthInput from '../UI/AuthInput';
 import SubmitButton from '../UI/SubmitButton';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
 
 interface LoginValues {
   email: string;
   password: string;
-}
-
-interface LoginFormProps {
-  onAuthenticate: (credentials: { email: string; password: string }) => void;
 }
 
 const validationSchema = Yup.object().shape({
@@ -23,23 +21,41 @@ const validationSchema = Yup.object().shape({
     .required('Password is required.'),
 });
 
-export default function LoginForm({ onAuthenticate }: LoginFormProps) {
-  const initialValues: LoginValues = { email: '', password: '' };
+export default function LoginForm() {
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const auth = FIREBASE_AUTH;
+
+  const handleLogin = async (
+    values: LoginValues,
+    { setSubmitting }: FormikHelpers<LoginValues>
+  ) => {
+    setIsAuthenticating(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, values.email, values.password);
+      console.log("✅ Login success:", response.user.email);
+  
+    } catch (error: any) {
+      console.error('Login error:', error.code || error.message);
+  
+    } finally {
+      setIsAuthenticating(false);
+      setSubmitting(false);
+    }
+  };
+
+  if (isAuthenticating) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#007bff" />
+      </View>
+    );
+  }
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{ email: '', password: '' }}
       validationSchema={validationSchema}
-      onSubmit={async (
-        values: LoginValues,
-        { setSubmitting }: FormikHelpers<LoginValues>
-      ) => {
-        try {
-          await onAuthenticate({ email: values.email, password: values.password });
-        } finally {
-          setSubmitting(false);
-        }
-      }}
+      onSubmit={handleLogin}
     >
       {({ handleChange, handleSubmit, values, errors, touched }) => (
         <View style={styles.container}>
@@ -57,7 +73,7 @@ export default function LoginForm({ onAuthenticate }: LoginFormProps) {
             icon="lock-closed-outline"
             value={values.password}
             onChangeText={handleChange('password')}
-            secureTextEntry={true}
+            secureTextEntry
             errorMessage={touched.password && errors.password ? errors.password : undefined}
           />
 

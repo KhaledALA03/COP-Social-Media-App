@@ -1,13 +1,14 @@
 
 import { Link } from 'expo-router';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { router } from 'expo-router';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
 
 export default function ProfileScreen() {
   return (
     <View>
       <Text>This is your Profile!</Text>
-      <Link href={"/login"} replace/>
+      <Button onPress={()=> FIREBASE_AUTH.signOut()}  title='logout'></Button>
     </View>
   );
 }
