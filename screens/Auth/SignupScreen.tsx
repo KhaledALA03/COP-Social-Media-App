@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background100,
     paddingHorizontal: 24,
+    
   },
   scrollView: {
     flex: 1,
@@ -53,12 +54,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
+    top: 100,
   },
   title: {
     fontSize: 28,
     fontFamily: "Lexend-Regular",
     color: Colors.primary100,
     marginBottom: 24,
+  
     
   },
 });
