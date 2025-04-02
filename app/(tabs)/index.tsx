@@ -1,10 +1,8 @@
+import { View, Text, StyleSheet } from 'react-native';
+import HomeScreen from '@/screens/Tabs/HomeScreen';
 
-import { View, Text } from 'react-native';
-
-export default function HomeScreen() {
+export default function index() {
   return (
-    <View>
-      <Text>Welcome to the Home Feed!</Text>
-    </View>
+    <HomeScreen/>
   );
 }

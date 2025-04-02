@@ -16,6 +16,7 @@ import login from '@/app/login';
 import { ActivityIndicator } from 'react-native';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import LoginImage from '@/app/components/UI/LoginImage';
 
 export default function LoginScreen() {
 
@@ -28,6 +29,7 @@ export default function LoginScreen() {
 
         <View style={styles.formContainer}>
           <Title />
+          {/* <LoginImage/> */}
           <Text style={styles.title}>Login to your account</Text>
           <LoginForm />
         </View>
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     color: Colors.primary100,
   },
   formContainer: {
-    top:100,
+    top:70,
     justifyContent: 'center',
     alignItems: 'center',
   },
