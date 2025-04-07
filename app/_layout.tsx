@@ -4,7 +4,7 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 
 import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { FIREBASE_AUTH } from "@/firebase/FirebaseConfig";
 
 export default function RootLayout() {
   const router = useRouter();

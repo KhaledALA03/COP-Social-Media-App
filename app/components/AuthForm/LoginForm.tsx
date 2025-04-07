@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import AuthInput from '../UI/AuthInput';
 import SubmitButton from '../UI/SubmitButton';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 
 interface LoginValues {
   email: string;

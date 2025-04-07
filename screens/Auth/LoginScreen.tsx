@@ -14,7 +14,7 @@ import DismissKeyboard from '@/app/components/utils/DismissKeyboard';
 import AuthFooter from '@/app/components/UI/AuthFooter';
 import login from '@/app/login';
 import { ActivityIndicator } from 'react-native';
-import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import LoginImage from '@/app/components/UI/LoginImage';
 

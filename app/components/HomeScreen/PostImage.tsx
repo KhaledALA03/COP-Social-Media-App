@@ -1,20 +1,46 @@
-import { StyleSheet, Image } from 'react-native';
-import React from 'react';
+import { Image, View, ActivityIndicator, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 
-export default function PostImage() {
+type PostImageProps = {
+  imageUrl: string;
+};
+
+export default function PostImage({ imageUrl }: PostImageProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <Image
-      source={require('../../../assets/images/erin-vey-0tEuA6ByeoY-unsplash.jpg')}
-      style={styles.image}
-      resizeMode="cover" 
-    />
+    <View style={styles.container}>
+      {isLoading && (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="#888" />
+        </View>
+      )}
+      <Image
+        source={{ uri: imageUrl }}
+        style={styles.image}
+        resizeMode="cover"
+        onLoadStart={() => setIsLoading(true)}
+        onLoadEnd={() => setIsLoading(false)}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
+  container: {
     height: '100%',
+    width: '100%',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loader: {
+    position: 'absolute',
+    zIndex: 1,
+  },
+  image: {
+    height: '100%',
+    width: '100%',
     borderTopLeftRadius: 23,
     borderTopRightRadius: 23,
   },

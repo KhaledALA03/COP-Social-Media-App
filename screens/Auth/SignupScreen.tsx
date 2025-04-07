@@ -14,7 +14,7 @@ import Colors from "@/constants/Colors";
 import BottomLeftBlob from "@/app/components/SVG/BottomLeftBlob";
 import { createUser } from "@/auth/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 
 
 export default function SignupScreen() {
