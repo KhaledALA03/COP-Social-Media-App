@@ -91,24 +91,30 @@
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import React from 'react';
 import Engagement from "./Engagement";
+import { useState } from 'react';
+import PostImage from './PostImage';
 const screenWidth = Dimensions.get('window').width;
 
 type PostCardProps = {
   title: string;
   userEmail: string;
   likes: number;
-  commentsCount: number;
+
   id: string;
   userId: string;
 };
 
-export default function PostCard({ title, userEmail,likes,commentsCount,id,userId }: PostCardProps) {
+export default function PostCard({ title, userEmail,likes,id,userId }: PostCardProps) {
+
   return (
     <View style={styles.container}>
+{/* <View style={styles.imageWrapper}>
+ <PostImage imageUrl={null} />
+  </View> */}
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.email}>{userEmail}</Text>
       <View style={styles.footer}>
-     <Engagement likes={likes} commentsCount={commentsCount} id={id}  userId={userId} />
+     <Engagement likes={likes} id={id}  userId={userId}  userEmail={userEmail}/>
       </View>
     </View>
   );
@@ -141,5 +147,8 @@ const styles = StyleSheet.create({
      marginTop: 6,
      flexDirection: "row",
 justifyContent: "space-between",
+   },
+    imageWrapper: {
+    height: 300,
    },
 });

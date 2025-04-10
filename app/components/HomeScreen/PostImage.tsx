@@ -16,7 +16,7 @@ export default function PostImage({ imageUrl }: PostImageProps) {
         </View>
       )}
       <Image
-        source={{ uri: imageUrl }}
+        source={require('../../../assets/images/erin-vey-0tEuA6ByeoY-unsplash.jpg')}
         style={styles.image}
         resizeMode="cover"
         onLoadStart={() => setIsLoading(true)}

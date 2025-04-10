@@ -10,6 +10,8 @@ import {
   Pressable,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import DismissKeyboard from '../utils/DismissKeyboard';
+import Colors from '@/constants/Colors';
 
 type CreatePostModalProps = {
   visible: boolean;
@@ -52,37 +54,42 @@ export default function CreatePostModal({
   
   return (
     <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.backdrop}>
-        <View style={styles.modalContent}>
-          <Text style={styles.title}>Create a Post</Text>
-
-          <TextInput
-            placeholder="Post title"
-            style={styles.input}
-            value={title}
-            onChangeText={setTitle}
-            placeholderTextColor={'#999'}
-          />
-
-          <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
-            <Text style={styles.uploadText}>
-              {imageUri ? 'Change Image' : 'Upload Image'}
-            </Text>
-          </TouchableOpacity>
-
-          {imageUri && (
-            <Image source={{ uri: imageUri }} style={styles.imagePreview} />
-          )}
-
-          <TouchableOpacity style={styles.button} onPress={handlePost}>
-            <Text style={styles.buttonText}>Post</Text>
-          </TouchableOpacity>
-
-          <Pressable onPress={onClose}>
-            <Text style={styles.cancelText}>Cancel</Text>
-          </Pressable>
+    <DismissKeyboard>
+        <View style={styles.backdrop}>
+          <View style={styles.modalContent}>
+            <Text style={styles.title}>Create a Post</Text>
+      
+            <TextInput
+              placeholder="Post title"
+              style={styles.input}
+              value={title}
+              onChangeText={setTitle}
+              placeholderTextColor={'#999'}
+              multiline={true}
+              numberOfLines={4}
+              
+            />
+      
+            <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+              <Text style={styles.uploadText}>
+                {imageUri ? 'Change Image' : 'Upload Image'}
+              </Text>
+            </TouchableOpacity>
+      
+            {imageUri && (
+              <Image source={{ uri: imageUri }} style={styles.imagePreview} />
+            )}
+      
+            <TouchableOpacity style={styles.button} onPress={handlePost}>
+              <Text style={styles.buttonText}>Post</Text>
+            </TouchableOpacity>
+      
+            <Pressable onPress={onClose}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+          </View>
         </View>
-      </View>
+    </DismissKeyboard>
     </Modal>
   );
 }
@@ -114,6 +121,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
+    height: 120,
+    textAlignVertical: 'top', 
   },
   uploadButton: {
     backgroundColor: '#f0f0f0',
@@ -133,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: Colors.primary300,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',

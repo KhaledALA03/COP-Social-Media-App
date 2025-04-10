@@ -1,8 +1,19 @@
-import { View, Text, Button, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
-import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
-import { useEffect, useState } from 'react';
-import { getPosts, Post } from '@/firebase/getPosts';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
 
+} from "react-native";
+import { FIREBASE_AUTH } from "@/firebase/FirebaseConfig";
+import { useEffect, useState } from "react";
+import { getPosts, Post } from "@/firebase/getPosts";
+import Header from "@/app/components/ProfileScreen/Header";
+import UserPosts from "@/app/components/ProfileScreen/UserPosts";
+import Colors from "@/constants/Colors";
 export default function ProfileScreen() {
   const user = FIREBASE_AUTH.currentUser;
   const [posts, setPosts] = useState<Post[]>([]);
@@ -23,33 +34,19 @@ export default function ProfileScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {/* Profile Header */}
-      <View style={styles.header}>
-        <Text style={styles.email}>{user?.email ?? 'No user'}</Text>
-        <Text style={styles.postCount}>Posts: {posts.length}</Text>
-        <Button title="Logout" onPress={() => FIREBASE_AUTH.signOut()} />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <Header posts={posts} />
+      <UserPosts />
 
-      {/* Posts List */}
-      {loading ? (
-        <ActivityIndicator size="large" style={styles.loading} />
-      ) : posts.length > 0 ? (
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingTop: 10 }}
-          renderItem={({ item }) => (
-            <View style={styles.postCard}>
-              <Text style={styles.postTitle}>{item.title}</Text>
-              <Text style={styles.postDate}>{item.createdAt}</Text>
-            </View>
-          )}
-        />
-      ) : (
-        <Text style={styles.noPosts}>No posts found</Text>
-      )}
-    </View>
+      <View style={{ width: "100%", alignItems: "center" }}>  
+        <TouchableOpacity
+          onPress={() => FIREBASE_AUTH.signOut()}
+          style={styles.logoutButton}
+        >
+          <Text style={styles.logout}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -57,22 +54,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
-    justifyContent:'center',
-    alignItems:'center',
-    marginTop: 50,
-  },
-  header: {
-    marginBottom: 20,
-    gap: 8,
-  },
-  email: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  postCount: {
-    fontSize: 14,
-    color: 'gray',
+    backgroundColor: Colors.background100,
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   loading: {
     marginTop: 20,
@@ -80,21 +64,33 @@ const styles = StyleSheet.create({
   postCard: {
     padding: 12,
     borderRadius: 8,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: "#f1f1f1",
     marginBottom: 10,
   },
   postTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 16,
   },
   postDate: {
-    color: 'gray',
+    color: "gray",
     fontSize: 12,
     marginTop: 4,
   },
   noPosts: {
     marginTop: 20,
-    fontStyle: 'italic',
-    color: 'gray',
+    fontStyle: "italic",
+    color: "gray",
+  },
+  logoutButton: {
+    backgroundColor: Colors.primary300,
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 20,
+     width: "80%",
+    alignItems: "center",
+  },
+  logout: {
+    fontSize: 20,
+    color: "white", // Ensure text is visible
   },
 });

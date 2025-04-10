@@ -1,6 +1,7 @@
-import { StyleSheet, View, FlatList } from 'react-native';
-import React from 'react';
-import PostCard from './PostCard';
+import { StyleSheet, View, FlatList } from "react-native";
+import React from "react";
+import PostCard from "./PostCard";
+import PostsList from "../UI/PostsList";
 
 type Post = {
   id: string | number;
@@ -29,33 +30,39 @@ type FeedProps = {
 export default function Feed({ data = [], onRefresh, refreshing }: FeedProps) {
   return (
     <View style={styles.container}>
-      <FlatList
+      {/* <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <PostCard
+              // title={item.title}
+              // imageUrl={item.photo || ''}
+              // creator={typeof item.creator === 'string' ? item.creator : String(item.userId)}
+              // likes={typeof item.likes === 'number' ? item.likes : 0}
+              // comments={typeof item.comments === 'number' ? item.comments : 0}
+              // createdAt={item.createdAt || ''}
+              // id={item.id?.toString?.() || ''}
+              // userId={item.userId?.toString?.() || ''}
+              // profilepic={item.profilePic || ''}
+
+              title={item.title}
+              userEmail={`@${item.email?.slice(0, item.email.indexOf('@')) || ''}`}
+
+              likes={item.likes ?? 0}
+              userId={(item.userId ?? '').toString()}
+              id={(item.id ?? '').toString()}
+          
+
+            />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          onRefresh={onRefresh} 
+          refreshing={refreshing} 
+        /> */}
+      <PostsList
         data={data}
-        renderItem={({ item }) => (
-          <PostCard
-            // title={item.title}
-            // imageUrl={item.photo || ''}
-            // creator={typeof item.creator === 'string' ? item.creator : String(item.userId)}
-            // likes={typeof item.likes === 'number' ? item.likes : 0}
-            // comments={typeof item.comments === 'number' ? item.comments : 0}
-            // createdAt={item.createdAt || ''}
-            // id={item.id?.toString?.() || ''}
-            // userId={item.userId?.toString?.() || ''}
-            // profilepic={item.profilePic || ''}
-
-            title={item.title}
-            userEmail={`@${item.email?.slice(0, item.email.indexOf('@')) || ''}`}
-            commentsCount={item.comments ?? 0}  
-            likes={item.likes ?? 0}
-            userId={item.userId.toString()}
-            id={item.id.toString()}
-
-          />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        onRefresh={onRefresh} 
-        refreshing={refreshing} 
+        onRefresh={onRefresh ?? (() => {})} // fallback to empty function
+        refreshing={refreshing ?? false}
       />
     </View>
   );
@@ -64,8 +71,8 @@ export default function Feed({ data = [], onRefresh, refreshing }: FeedProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
     marginTop: 20,
   },
 });

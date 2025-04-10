@@ -23,6 +23,7 @@ export default function HomeScreen() {
     } finally {
       setLoading(false);
       console.log("🔚 Loading complete");
+    
     }
   };
 

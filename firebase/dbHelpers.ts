@@ -1,5 +1,5 @@
-import { ref, set, push } from 'firebase/database';
-import { FIREBASE_DB } from './FirebaseConfig';
+import { ref, set, push,update,get, child  } from 'firebase/database';
+import { FIREBASE_APP, FIREBASE_DB } from './FirebaseConfig';
 
 
 export function writeUserData(
@@ -23,6 +23,8 @@ export function writeUserData(
  * @param photo - Optional image URL
  */
 
+
+
 export async function createPost(
   userId: string,
   title: string,
@@ -34,9 +36,9 @@ export async function createPost(
 
     await set(postRef, {
       userId,
-      email: email || '', // Set empty string if no email is provided
+      email: email || '', 
       title,
-      photo: photo || '', // Set empty string if no image is provided
+      photo: photo || '',
       likes: 0,
       comments: 0,
       createdAt: new Date().toISOString(),
@@ -48,23 +50,55 @@ export async function createPost(
   }
 }
 
-
+export async function updateLikes(postId: string, increment: number) {
+  try {
+    const postRef = ref(FIREBASE_DB, `posts/${postId}`);
+    await update(postRef, {
+      likes: increment
+    });
+    console.log('✅ Likes updated in Firebase DB');
+  } catch (error) {
+    console.error('❌ Failed to update likes:', error);
+  }
+}
 export async function createComments(
   userId: string,
   content: string,
   postId: string,
-){
+  userEmail: string
+) {
   try {
+  
+    const postRef = ref(FIREBASE_DB, `posts/${postId}`);
+    const snapshot = await get(postRef);
+    const currentPost = snapshot.val();
+
+    let currentCommentsCount = currentPost?.commentsCount || 0; 
+
+  
     const commentRef = push(ref(FIREBASE_DB, `posts/${postId}/comments`));
     await set(commentRef, {
       userId,
       content,
       createdAt: new Date().toISOString(),
+      userEmail,
     });
-    console.log('✅ Comment saved to Firebase DB');
 
+
+  
+    const updatedCommentsCount = currentCommentsCount + 1;
+
+
+    await update(postRef, {
+      commentsCount: updatedCommentsCount, 
+    });
+
+    console.log("Updated comments count: " + updatedCommentsCount);
+    console.log('✅ Comment saved and comments count updated in Firebase DB');
   } catch (error) {
     console.error('❌ Failed to create comment:', error);
-
   }
 }
+
+
+

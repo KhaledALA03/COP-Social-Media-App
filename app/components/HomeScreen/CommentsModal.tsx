@@ -1,20 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Modal,
-  TouchableOpacity,
-  FlatList,
-  TouchableWithoutFeedback,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView, Platform } from 'react-native';
 import { createComments } from '@/firebase/dbHelpers';
 import { getComments } from '@/firebase/getComments ';
-
+import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
+import Colors from '@/constants/Colors';
 
 type CommentsModalProps = {
   visible: boolean;
@@ -22,80 +12,85 @@ type CommentsModalProps = {
   commentsCount: number;
   postId: string;
   userId: string;
+  userEmail: string; 
+  setCommentsCount: (count: number) => void;
+
 };
 
 export default function CommentsModal({
   visible,
   onClose,
   commentsCount,
+  setCommentsCount,
   postId,
   userId,
+  userEmail, 
+
 }: CommentsModalProps) {
   const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState<any[]>([]);  // Comments state
+  const [comments, setComments] = useState<any[]>([]);  
   const [loading, setLoading] = useState(true);
 
-  // Fetch comments when the modal becomes visible
+
+
   useEffect(() => {
     if (visible) {
       const fetchComments = async () => {
-        const fetchedComments = await getComments(postId); // Fetch the comments
-        setComments(fetchedComments);  // Update state
-        setLoading(false);  // Turn off loading spinner
+        const fetchedComments = await getComments(postId); 
+        setComments(fetchedComments);  
+        setLoading(false);  
       };
       fetchComments();
     }
-  }, [visible, postId]);  // Re-run when modal visibility or postId changes
+  }, [visible, postId]);  
 
   const handlePostComment = async () => {
     if (!commentText.trim()) return;
+  
+    const currentUserEmail = FIREBASE_AUTH.currentUser?.email
+    const username = `@${currentUserEmail?.slice(0, currentUserEmail.indexOf('@'))}`;
 
-    await createComments(userId, commentText.trim(), postId); // Create comment
-    setCommentText('');  // Clear input field
+  
+    await createComments(userId, commentText.trim(), postId, username); 
+    setCommentText('');  
+  
 
-    // Optionally, trigger re-fetch to update comments
-    setLoading(true); // Show loading while comments refresh
+    const updatedCount = commentsCount + 1;
+    setCommentsCount(updatedCount);  
+  
+    setLoading(true);
     const fetchedComments = await getComments(postId);
-    setComments(fetchedComments);
-    setLoading(false);  // Turn off loading after refresh
+    setComments(fetchedComments); 
+  
+    setLoading(false);
   };
-
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent={true}
-      onRequestClose={onClose}
-    >
+    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.overlay}>
           <TouchableWithoutFeedback>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              style={styles.modalContainer}
-            >
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.modalContainer}>
               <View style={styles.header}>
                 <Text style={styles.title}>Comments</Text>
                 <TouchableOpacity onPress={onClose}>
-                  <Ionicons name="close" size={24} color="#333" />
+                  <Ionicons name="close" size={24} color={Colors.primary300} />
                 </TouchableOpacity>
               </View>
 
               {loading ? (
-                <Text>Loading comments...</Text>  // Loading state
+                <Text>Loading comments...</Text>
               ) : (
                 <FlatList
-                data={comments}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.list}
-                renderItem={({ item }) => (
-                  <View style={styles.comment}>
-                    <Text style={styles.username}>{item.userId}</Text>
-                    <Text>{item.content}</Text>
-                  </View>
-                )}
-              />
-              
+                  data={comments}
+                  keyExtractor={(item) => item.id}
+                  contentContainerStyle={styles.list}
+                  renderItem={({ item }) => (
+                    <View style={styles.comment}>
+                      <Text style={styles.username}>{item.userEmail}</Text>
+                      <Text>{item.content}</Text>
+                    </View>
+                  )}
+                />
               )}
 
               <View style={styles.inputRow}>
@@ -140,6 +135,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.primary300,
   },
   list: {
     gap: 12,
@@ -147,8 +143,8 @@ const styles = StyleSheet.create({
   },
   comment: {
     paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomWidth: 2,
+    borderBottomColor: '#ffffff',
   },
   username: {
     fontWeight: '600',
@@ -160,6 +156,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
+    marginBottom:20
   },
   input: {
     flex: 1,
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
   },
   sendBtn: {
     marginLeft: 10,
-    backgroundColor: '#007BFF',
+    backgroundColor: Colors.primary300,
     padding: 10,
     borderRadius: 20,
   },

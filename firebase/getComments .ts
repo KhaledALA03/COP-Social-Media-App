@@ -9,13 +9,13 @@ export const getComments = async (postId: string): Promise<Comment[]> => {
     if (snapshot.exists()) {
       const data = snapshot.val();
 
-      // Convert object to an array of comment objects
       const formattedComments: Comment[] = Object.entries(data).map(([key, value]: [string, any]) => ({
-        id: key,    // Firebase key
-        ...value,   // Firebase data
+        id: key,   
+        ...value,  
       }));
-
-      return formattedComments.reverse();  // Newest comments first
+      
+      console.log(formattedComments)
+      return formattedComments.reverse();  
     } else {
       return [];
     }
