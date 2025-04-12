@@ -61,8 +61,9 @@ export default function Feed({ data = [], onRefresh, refreshing }: FeedProps) {
         /> */}
       <PostsList
         data={data}
-        onRefresh={onRefresh ?? (() => {})} // fallback to empty function
+        onRefresh={onRefresh ?? (() => {})} 
         refreshing={refreshing ?? false}
+        header={false}
       />
     </View>
   );

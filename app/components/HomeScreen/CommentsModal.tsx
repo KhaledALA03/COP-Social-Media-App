@@ -1,10 +1,21 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Modal, TouchableOpacity, FlatList, TextInput, TouchableWithoutFeedback, KeyboardAvoidingView, Platform } from 'react-native';
-import { createComments } from '@/firebase/dbHelpers';
-import { getComments } from '@/firebase/getComments ';
-import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
-import Colors from '@/constants/Colors';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { createComments } from "@/firebase/dbHelpers";
+import { getComments } from "@/firebase/getComments ";
+import { FIREBASE_AUTH } from "@/firebase/FirebaseConfig";
+import Colors from "@/constants/Colors";
 
 type CommentsModalProps = {
   visible: boolean;
@@ -12,9 +23,8 @@ type CommentsModalProps = {
   commentsCount: number;
   postId: string;
   userId: string;
-  userEmail: string; 
+  userEmail: string;
   setCommentsCount: (count: number) => void;
-
 };
 
 export default function CommentsModal({
@@ -24,52 +34,58 @@ export default function CommentsModal({
   setCommentsCount,
   postId,
   userId,
-  userEmail, 
-
+  userEmail,
 }: CommentsModalProps) {
-  const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState<any[]>([]);  
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-
 
   useEffect(() => {
     if (visible) {
       const fetchComments = async () => {
-        const fetchedComments = await getComments(postId); 
-        setComments(fetchedComments);  
-        setLoading(false);  
+        const fetchedComments = await getComments(postId);
+        setComments(fetchedComments);
+        setLoading(false);
       };
       fetchComments();
     }
-  }, [visible, postId]);  
+  }, [visible, postId]);
 
   const handlePostComment = async () => {
     if (!commentText.trim()) return;
-  
-    const currentUserEmail = FIREBASE_AUTH.currentUser?.email
-    const username = `@${currentUserEmail?.slice(0, currentUserEmail.indexOf('@'))}`;
 
-  
-    await createComments(userId, commentText.trim(), postId, username); 
-    setCommentText('');  
-  
+    const currentUserEmail = FIREBASE_AUTH.currentUser?.email;
+    const username = `@${currentUserEmail?.slice(
+      0,
+      currentUserEmail.indexOf("@")
+    )}`;
+
+    await createComments(userId, commentText.trim(), postId, username);
+    setCommentText("");
 
     const updatedCount = commentsCount + 1;
-    setCommentsCount(updatedCount);  
-  
+    setCommentsCount(updatedCount);
+
     setLoading(true);
     const fetchedComments = await getComments(postId);
-    setComments(fetchedComments); 
-  
+    setComments(fetchedComments);
+
     setLoading(false);
   };
   return (
-    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.overlay}>
           <TouchableWithoutFeedback>
-            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.modalContainer}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : undefined}
+              style={styles.modalContainer}
+            >
               <View style={styles.header}>
                 <Text style={styles.title}>Comments</Text>
                 <TouchableOpacity onPress={onClose}>
@@ -79,6 +95,10 @@ export default function CommentsModal({
 
               {loading ? (
                 <Text>Loading comments...</Text>
+              ) : comments.length === 0 ? (
+                <Text style={{ textAlign: "center", marginTop: 20 }}>
+                  No comments yet.
+                </Text>
               ) : (
                 <FlatList
                   data={comments}
@@ -92,7 +112,6 @@ export default function CommentsModal({
                   )}
                 />
               )}
-
               <View style={styles.inputRow}>
                 <TextInput
                   placeholder="Write a comment..."
@@ -100,7 +119,10 @@ export default function CommentsModal({
                   onChangeText={setCommentText}
                   style={styles.input}
                 />
-                <TouchableOpacity onPress={handlePostComment} style={styles.sendBtn}>
+                <TouchableOpacity
+                  onPress={handlePostComment}
+                  style={styles.sendBtn}
+                >
                   <Ionicons name="send" size={22} color="white" />
                 </TouchableOpacity>
               </View>
@@ -115,11 +137,11 @@ export default function CommentsModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   modalContainer: {
-    height: '60%',
-    backgroundColor: '#ebebeb',
+    height: "60%",
+    backgroundColor: "#ebebeb",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingHorizontal: 20,
@@ -127,14 +149,14 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 12,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.primary300,
   },
   list: {
@@ -144,23 +166,24 @@ const styles = StyleSheet.create({
   comment: {
     paddingVertical: 8,
     borderBottomWidth: 2,
-    borderBottomColor: '#ffffff',
+    borderBottomColor: "#ffffff",
   },
   username: {
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 2,
   },
   inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
-    marginBottom:20
+    borderTopColor: "#ddd",
+    marginBottom: 20,
+    
   },
   input: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 25,

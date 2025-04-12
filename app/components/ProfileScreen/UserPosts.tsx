@@ -3,8 +3,8 @@ import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { useEffect, useState, useCallback } from 'react';
 import { getPosts, Post } from '@/firebase/getPosts';
 import PostsList from '../UI/PostsList';
-
-export default function UserPosts() {
+import Header from './Header';
+export default function UserPosts({header}) {
   const user = FIREBASE_AUTH.currentUser;
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,8 @@ export default function UserPosts() {
 
   return (
 
-    <PostsList  data={posts}    onRefresh={onRefresh} refreshing={refreshing}  />
+
+    <PostsList  data={posts}  onRefresh={onRefresh} refreshing={refreshing} header={header}/>
     // <View style={styles.container}>
     //   {loading ? (
     //     <ActivityIndicator size="large" style={styles.loading} />
@@ -59,48 +60,4 @@ export default function UserPosts() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  loading: {
-    marginTop: 20,
-  },
-  postCard: {
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#f1f1f1',
-    marginBottom: 10,
-    width: 300,
-  },
-  postTitle: {
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-  postDate: {
-    color: 'gray',
-    fontSize: 12,
-    marginTop: 4,
-  },
-  noPosts: {
-    marginTop: 20,
-    fontStyle: 'italic',
-    color: 'gray',
-  },
-  logoutButton: {
-    padding: 10,
-    backgroundColor: '#00d9ff',
-    borderRadius: 10,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  logout: {
-    fontSize: 20,
-    color: 'white',
-  },
-});
+const styles = StyleSheet.create({  })

@@ -99,20 +99,21 @@ type PostCardProps = {
   title: string;
   userEmail: string;
   likes: number;
-
+  imageUrl:string;
   id: string;
   userId: string;
 };
 
-export default function PostCard({ title, userEmail,likes,id,userId }: PostCardProps) {
+export default function PostCard({ title, userEmail,likes,id,userId,imageUrl}: PostCardProps) {
 
+  const domain = `@${userEmail?.split('@')[0]}`;
   return (
     <View style={styles.container}>
-{/* <View style={styles.imageWrapper}>
- <PostImage imageUrl={null} />
-  </View> */}
+<View style={styles.imageWrapper}>
+ <PostImage imageUrl={"null"} />
+  </View>
+      <Text style={styles.email}>{domain}</Text>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.email}>{userEmail}</Text>
       <View style={styles.footer}>
      <Engagement likes={likes} id={id}  userId={userId}  userEmail={userEmail}/>
       </View>
@@ -140,8 +141,9 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   email: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#666',
+    marginTop:4
   },
      footer: {
      marginTop: 6,

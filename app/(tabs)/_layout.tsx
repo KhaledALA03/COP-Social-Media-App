@@ -58,7 +58,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            headerTitle: 'LinkUp',
+            headerTitle: 'LinkUp Feed',
             headerTitleAlign: 'left',
             tabBarLabel: 'Home',
             headerStyle: {
@@ -85,7 +85,18 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="chat"
           options={{
-            headerShown: false,
+            headerTitle: 'LinkUp Direct Messages',
+            headerTitleAlign: 'left',
+            headerStyle: {
+              backgroundColor: '#fff',
+            },
+            headerTitleStyle: {
+              fontFamily: 'DancingScript-Regular',
+              fontSize: 30,
+              color: Colors.primary300,
+              alignItems: 'flex-start',
+              height: 50,
+            },
             tabBarIcon: ({ color }) => (
               <Ionicons
                 name="chatbubble-outline"
@@ -110,7 +121,18 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="likes"
           options={{
-            headerShown: false,
+            headerTitle: 'LinkUp Likes',
+            headerTitleAlign: 'left',
+            headerStyle: {
+              backgroundColor: '#fff',
+            },
+            headerTitleStyle: {
+              fontFamily: 'DancingScript-Regular',
+              fontSize: 30,
+              color: Colors.primary300,
+              alignItems: 'flex-start',
+              height: 50,
+            },
             tabBarIcon: ({ color }) => (
               <Ionicons
                 name="heart-outline"
@@ -125,8 +147,20 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="profile"
           options={{
-          headerTransparent: true,
-          headerTitle: '',
+            headerTitle: 'LinkUp Profile',
+            headerTitleAlign: 'left',
+            tabBarLabel: 'Home',
+            headerStyle: {
+              backgroundColor: '#fff',
+            },
+            headerTitleStyle: {
+              fontFamily: 'DancingScript-Regular',
+              fontSize: 30,
+              color: Colors.primary300,
+              alignItems: 'flex-start',
+              height: 50,
+            },
+            headerShadowVisible: false,
             tabBarIcon: ({ color }) => (
               <Ionicons
                 name="person-outline"

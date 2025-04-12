@@ -1,6 +1,6 @@
-import { ref, set, push,update,get, child  } from 'firebase/database';
-import { FIREBASE_APP, FIREBASE_DB } from './FirebaseConfig';
-
+import { ref, set, push,update,get, child, increment } from 'firebase/database';
+import { FIREBASE_APP, FIREBASE_DB, FIREBASE_AUTH } from './FirebaseConfig';
+import { SendPushNotification } from '@/app/components/utils/SendPushNotification';
 
 export function writeUserData(
   userId: string,
@@ -41,6 +41,7 @@ export async function createPost(
       photo: photo || '',
       likes: 0,
       comments: 0,
+      likedBy:{      },
       createdAt: new Date().toISOString(),
     });
 
@@ -50,17 +51,65 @@ export async function createPost(
   }
 }
 
-export async function updateLikes(postId: string, increment: number) {
+
+
+
+export async function toggleLike({
+  user,
+  postId,
+}: {
+  user: string;
+  postId: string;
+}) {
   try {
+    const likeRef = ref(FIREBASE_DB, `posts/${postId}/likedBy/${user}`);
     const postRef = ref(FIREBASE_DB, `posts/${postId}`);
-    await update(postRef, {
-      likes: increment
-    });
-    console.log('✅ Likes updated in Firebase DB');
+    const snapshot = await get(likeRef);
+    const postSnap = await get(postRef);
+
+    if (!postSnap.exists()) return;
+
+    const postData = postSnap.val();
+    const ownerId = postData.userId;
+    const postTitle = postData.title;
+
+    const updates: any = {};
+
+    if (snapshot.exists()) {
+      // ❌ Unlike
+      updates[`likedBy/${user}`] = null;
+      updates[`likes`] = increment(-1);
+      console.log('✅ Like removed');
+    } else {
+      // ✅ Like
+      updates[`likedBy/${user}`] = true;
+      updates[`likes`] = increment(1);
+      console.log('✅ Like added');
+
+      // 🔔 Send notification to post owner (if not self-like)
+      if (user !== ownerId) {
+        const ownerRef = ref(FIREBASE_DB, `users/${ownerId}`);
+        const ownerSnap = await get(ownerRef);
+        const ownerData = ownerSnap.val();
+        const token = ownerData?.expoPushToken;
+
+        if (token) {
+          await SendPushNotification(
+            token,
+            '❤️ New Like!',
+            `Someone liked your post: "${postTitle}"`,
+            { postId }
+          );
+        }
+      }
+    }
+
+    await update(postRef, updates);
   } catch (error) {
-    console.error('❌ Failed to update likes:', error);
+    console.error('❌ Failed to toggle like:', error);
   }
 }
+
 export async function createComments(
   userId: string,
   content: string,

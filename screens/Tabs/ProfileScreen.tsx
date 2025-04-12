@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-
+  ScrollView,
 } from "react-native";
 import { FIREBASE_AUTH } from "@/firebase/FirebaseConfig";
 import { useEffect, useState } from "react";
@@ -35,10 +35,9 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header posts={posts} />
-      <UserPosts />
+      <UserPosts header={true} />
 
-      <View style={{ width: "100%", alignItems: "center" }}>  
+      <View style={{ alignItems: "center" }}>
         <TouchableOpacity
           onPress={() => FIREBASE_AUTH.signOut()}
           style={styles.logoutButton}
@@ -53,7 +52,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+
     backgroundColor: Colors.background100,
     justifyContent: "flex-start",
     alignItems: "center",
@@ -86,11 +85,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginBottom: 20,
-     width: "80%",
+    width: "80%",
     alignItems: "center",
   },
   logout: {
     fontSize: 20,
-    color: "white", // Ensure text is visible
+    color: "white",
   },
 });
