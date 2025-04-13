@@ -6,6 +6,9 @@ import AuthInput from '../UI/AuthInput';
 import SubmitButton from '../UI/SubmitButton';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
+import { createUser } from '@/auth/auth';
+import { saveUserDetails } from '@/firebase/dbHelpers';
+
 
 interface RegValues {
   email: string;
@@ -29,21 +32,46 @@ export default function RegForm() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const auth = FIREBASE_AUTH;
 
+  // const handleSignUp = async (
+  //   values: RegValues,
+  //   { setSubmitting }: FormikHelpers<RegValues>
+  // ) => {
+  //   setIsAuthenticating(true);
+  //   try {
+  //     const response = await createUserWithEmailAndPassword(
+  //       auth,
+  //       values.email,
+  //       values.password
+  //     );
+  //     console.log("✅ Signup success:", response.user.email);
+
+  //   } catch (error) {
+  //     console.error("❌ Signup error:", error);
+  //   } finally {
+  //     setIsAuthenticating(false);
+  //     setSubmitting(false);
+  //   }
+  // };
+
   const handleSignUp = async (
     values: RegValues,
     { setSubmitting }: FormikHelpers<RegValues>
   ) => {
     setIsAuthenticating(true);
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
+      const userCredential = await createUserWithEmailAndPassword(
+        FIREBASE_AUTH,
         values.email,
         values.password
       );
-      console.log("✅ Signup success:", response.user.email);
-
+  
+      const { uid, email } = userCredential.user;
+  
+      await saveUserDetails(uid, email);
+  
+      console.log('✅ Signup and save successful');
     } catch (error) {
-      console.error("❌ Signup error:", error);
+      console.error('❌ Signup error:', error);
     } finally {
       setIsAuthenticating(false);
       setSubmitting(false);

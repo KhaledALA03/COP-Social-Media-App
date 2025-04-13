@@ -1,6 +1,6 @@
 import { ref, set, push,update,get, child, increment } from 'firebase/database';
 import { FIREBASE_APP, FIREBASE_DB, FIREBASE_AUTH } from './FirebaseConfig';
-import { SendPushNotification } from '@/app/components/utils/SendPushNotification';
+
 
 export function writeUserData(
   userId: string,
@@ -52,7 +52,18 @@ export async function createPost(
 }
 
 
-
+export async function saveUserDetails(uid: string, email: string) {
+  try {
+    await set(ref(FIREBASE_DB, `users/${uid}`), {
+      uid,
+      email,
+    });
+    console.log('✅ User details saved to DB');
+  } catch (error) {
+    console.error('❌ Failed to save user details:', error);
+    throw error;
+  }
+}
 
 export async function toggleLike({
   user,
@@ -65,43 +76,18 @@ export async function toggleLike({
     const likeRef = ref(FIREBASE_DB, `posts/${postId}/likedBy/${user}`);
     const postRef = ref(FIREBASE_DB, `posts/${postId}`);
     const snapshot = await get(likeRef);
-    const postSnap = await get(postRef);
-
-    if (!postSnap.exists()) return;
-
-    const postData = postSnap.val();
-    const ownerId = postData.userId;
-    const postTitle = postData.title;
 
     const updates: any = {};
 
     if (snapshot.exists()) {
-      // ❌ Unlike
       updates[`likedBy/${user}`] = null;
       updates[`likes`] = increment(-1);
       console.log('✅ Like removed');
     } else {
-      // ✅ Like
+
       updates[`likedBy/${user}`] = true;
       updates[`likes`] = increment(1);
       console.log('✅ Like added');
-
-      // 🔔 Send notification to post owner (if not self-like)
-      if (user !== ownerId) {
-        const ownerRef = ref(FIREBASE_DB, `users/${ownerId}`);
-        const ownerSnap = await get(ownerRef);
-        const ownerData = ownerSnap.val();
-        const token = ownerData?.expoPushToken;
-
-        if (token) {
-          await SendPushNotification(
-            token,
-            '❤️ New Like!',
-            `Someone liked your post: "${postTitle}"`,
-            { postId }
-          );
-        }
-      }
     }
 
     await update(postRef, updates);

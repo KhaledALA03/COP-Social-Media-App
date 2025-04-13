@@ -12,6 +12,7 @@ import { FIREBASE_AUTH } from "@/firebase/FirebaseConfig";
 import { useEffect, useState } from "react";
 import { getPosts, Post } from "@/firebase/getPosts";
 import Header from "@/app/components/ProfileScreen/Header";
+import { testWriteToFirebase } from "@/auth/auth";
 import UserPosts from "@/app/components/ProfileScreen/UserPosts";
 import Colors from "@/constants/Colors";
 export default function ProfileScreen() {
@@ -19,6 +20,9 @@ export default function ProfileScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
+
+
+  
   const getUserPosts = async () => {
     if (!user) return;
 
@@ -32,6 +36,7 @@ export default function ProfileScreen() {
   useEffect(() => {
     getUserPosts();
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container}>

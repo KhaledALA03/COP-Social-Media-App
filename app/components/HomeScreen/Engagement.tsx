@@ -46,20 +46,15 @@ export default function Engagement({
   }, [id, user]);
 
   const handleLike = async () => {
-    if (!user) return; // guard clause
+    if (!user) return;
 
+
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikeCount((prev) => prev + (newLiked ? 1 : -1));
+
+  
     await toggleLike({ user, postId: id });
-
-    const postRef = ref(FIREBASE_DB, `posts/${id}`);
-    const snapshot = await get(postRef);
-
-    if (snapshot.exists()) {
-      const postData = snapshot.val();
-      const likedBy = postData.likedBy || {};
-
-      setLikeCount(Object.keys(likedBy).length);
-      setLiked(!!likedBy[user]);
-    }
   };
 
   return (

@@ -27,7 +27,12 @@ export default function PostsList({
       {refreshing ? (
         <ActivityIndicator size="large" color={Colors.primary100} style={styles.loading} />
       ) : data.length === 0 ? (
-        <Text style={styles.noPosts}>No posts found</Text>
+        <>
+<View style={{alignItems:'center',justifyContent:'flex-start',flex:1}}>
+          <Header posts={data} /> 
+          <Text style={styles.noPosts}>No posts yet</Text>
+</View>
+        </>
       ) : (
         <FlatList
           data={data}

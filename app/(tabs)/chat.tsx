@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import ChatScreen from '@/screens/Tabs/ChatScreen';
 
 export default function Messaging() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Messaging</Text>
-    </View>
+    <ChatScreen/>
   );
 }
 

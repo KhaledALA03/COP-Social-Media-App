@@ -42,8 +42,12 @@ export default function RootLayout() {
           name="signup"
           options={{ headerTransparent: true, headerTitle: "" }}
         />
+            <Stack.Screen
+          name="directmessages"
+          options={{ headerTitle:"chat"}}
+        />
         
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false, headerTitle:'Chats' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="dark" />
