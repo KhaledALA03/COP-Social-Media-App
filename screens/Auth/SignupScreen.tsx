@@ -30,6 +30,7 @@ export default function SignupScreen() {
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
         >
           <Text style={styles.title}>Create a new account</Text>
           <RegForm />

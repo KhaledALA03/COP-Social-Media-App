@@ -32,26 +32,7 @@ export default function RegForm() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const auth = FIREBASE_AUTH;
 
-  // const handleSignUp = async (
-  //   values: RegValues,
-  //   { setSubmitting }: FormikHelpers<RegValues>
-  // ) => {
-  //   setIsAuthenticating(true);
-  //   try {
-  //     const response = await createUserWithEmailAndPassword(
-  //       auth,
-  //       values.email,
-  //       values.password
-  //     );
-  //     console.log("✅ Signup success:", response.user.email);
 
-  //   } catch (error) {
-  //     console.error("❌ Signup error:", error);
-  //   } finally {
-  //     setIsAuthenticating(false);
-  //     setSubmitting(false);
-  //   }
-  // };
 
   const handleSignUp = async (
     values: RegValues,
