@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     maxWidth: '75%',
   },
   myMessage: {
-    backgroundColor: '#DCF8C5',
+    backgroundColor: '#c4e5fe',
     alignSelf: 'flex-end',
   },
   theirMessage: {

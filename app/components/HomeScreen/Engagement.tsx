@@ -1,16 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import CommentsModal from './CommentsModal';
 import { ref, get } from 'firebase/database';
 import { FIREBASE_DB, FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
-import { toggleLike } from '@/firebase/dbHelpers';
+import { toggleLike, deletePost } from '@/firebase/dbHelpers';
 
 type EngagementProps = {
   likes: number;
   userId: string;
   id: string;
   userEmail: string;
+  showDelete?: boolean;
 };
 
 export default function Engagement({
@@ -18,6 +19,7 @@ export default function Engagement({
   id,
   userId,
   userEmail,
+  showDelete = false,
 }: EngagementProps) {
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -35,7 +37,6 @@ export default function Engagement({
       if (snapshot.exists()) {
         const postData = snapshot.val();
         const likedBy = postData.likedBy || {};
-
         setLikeCount(Object.keys(likedBy).length);
         setLiked(!!likedBy[user]);
         setCommentsCount(postData.commentsCount || 0);
@@ -47,14 +48,23 @@ export default function Engagement({
 
   const handleLike = async () => {
     if (!user) return;
-
-
     const newLiked = !liked;
     setLiked(newLiked);
     setLikeCount((prev) => prev + (newLiked ? 1 : -1));
-
-  
     await toggleLike({ user, postId: id });
+  };
+
+  const handleDelete = () => {
+    Alert.alert('Delete Post', 'Are you sure you want to delete this post?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          await deletePost(id);
+        },
+      },
+    ]);
   };
 
   return (
@@ -82,6 +92,19 @@ export default function Engagement({
           <Text style={styles.text}>{commentsCount}</Text>
         </TouchableOpacity>
       </View>
+
+      {showDelete && user === userId && (
+        <View style={styles.item}>
+          <TouchableOpacity onPress={handleDelete} style={styles.row}>
+            <Ionicons
+              name="trash-outline"
+              size={25}
+              color="#d11a2a"
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <CommentsModal
         visible={showComments}

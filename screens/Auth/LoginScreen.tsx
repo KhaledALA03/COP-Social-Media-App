@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Pressable, ActivityIndicator } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Notifications from 'expo-notifications';
 import DismissKeyboard from '@/app/components/utils/DismissKeyboard';
 import TopRightBlob from '@/app/components/SVG/TopRightBlob';
 import BottomLeftBlob from '@/app/components/SVG/BottomLeftBlob';
@@ -13,9 +14,13 @@ import Colors from '@/constants/Colors';
 export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
+
+
+  
+
   return (
     <DismissKeyboard>
-      <SafeAreaView style={styles.container}  testID="login-screen">
+      <SafeAreaView style={styles.container} testID="login-screen">
         <TopRightBlob />
         <BottomLeftBlob />
 

@@ -13,6 +13,7 @@ type PostCardProps = {
   imageUrl: string;
   id: string;
   userId: string;
+  showDelete?: boolean;
 };
 
 const avatarColors = [
@@ -32,7 +33,7 @@ const getColorForUser = (email: string) => {
   return avatarColors[hash % avatarColors.length];
 };
 
-export default function PostCard({ title, userEmail, likes, id, userId, imageUrl }: PostCardProps) {
+export default function PostCard({ title, userEmail, likes, id, userId, imageUrl,showDelete }: PostCardProps) {
   const domain = `@${userEmail?.split('@')[0]}`;
 
   return (
@@ -47,7 +48,7 @@ export default function PostCard({ title, userEmail, likes, id, userId, imageUrl
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.footer}>
-        <Engagement likes={likes} id={id} userId={userId} userEmail={userEmail} />
+        <Engagement likes={likes} id={id} userId={userId} userEmail={userEmail} showDelete={showDelete} />
       </View>
     </View>
   );
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '600',
+
     marginBottom: 8,
     color: '#333',
   },

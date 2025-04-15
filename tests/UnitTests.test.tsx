@@ -106,3 +106,4 @@ describe('LoginForm validation tests', () => {
     });
   });
 });
+

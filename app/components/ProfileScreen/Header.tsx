@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions} from 'react-native';
 import React from 'react';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import Colors from '@/constants/Colors';
-
+const screenWidth = Dimensions.get('window').width;
 type HeaderProps = {
   posts: any[];
 };
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
     elevation: 3,
+    width: screenWidth * 0.9,
   },
   avatar: {
     width: 100,
