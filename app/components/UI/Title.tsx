@@ -12,7 +12,7 @@ export default function Title() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginVertical: 20,
+
   },
   title: {
     fontSize: 60,
