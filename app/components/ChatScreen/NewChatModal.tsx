@@ -72,7 +72,7 @@ export default function NewChatModal({ visible, onClose, onSelectUser }: Props) 
             )}
             keyExtractor={(item) => item.uid}
             renderItem={({ item }) => (
-              <TouchableOpacity
+              <TouchableOpacity 
                 style={styles.userItem}
                 onPress={() => {
                   const currentUserId = FIREBASE_AUTH.currentUser?.uid;

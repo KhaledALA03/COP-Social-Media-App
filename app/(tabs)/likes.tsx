@@ -4,7 +4,7 @@ import React from 'react';
 export default function Likes() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Likes</Text>
+      <Text style={styles.text}>Coming soon....</Text>
     </View>
   );
 }

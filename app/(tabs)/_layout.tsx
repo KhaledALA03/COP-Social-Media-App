@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
 import Colors from '@/constants/Colors';
 import CreatePostModal from '../components/HomeScreen/CreatePostModal';
 import { uploadImageAsync } from '@/firebase/storageHelpers';
@@ -183,12 +183,12 @@ function CustomCenterButton({ onPress }: { onPress: () => void }) {
       activeOpacity={0.8}
       onPress={onPress}
     >
-      <View style={styles.centerButton}>
+<View style={styles.centerButton}>
         <Ionicons
-          name="add"
+          name="add-outline"
           size={24}
           color="#fff"
-          style={{ transform: [{ rotate: '45deg' }] }}
+          style={{ transform: [{ rotate: '-45deg' }] }}
         />
       </View>
     </TouchableOpacity>

@@ -24,7 +24,7 @@ export default function SignupScreen() {
 
   return (
     <DismissKeyboard>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}  testID="signup-screen">
         <BottomLeftBlob />
 
         <ScrollView

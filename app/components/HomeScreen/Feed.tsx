@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList } from "react-native";
 import React from "react";
-import PostCard from "./PostCard";
+import PostCard from "../UI/PostCard";
 import PostsList from "../UI/PostsList";
 
 type Post = {

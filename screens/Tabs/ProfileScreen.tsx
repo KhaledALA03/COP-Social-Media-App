@@ -39,7 +39,7 @@ export default function ProfileScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}  testID="profile-screen">
       <UserPosts header={true} />
 
       <View style={{ alignItems: "center" }}>

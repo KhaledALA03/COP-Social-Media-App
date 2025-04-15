@@ -24,7 +24,7 @@ export default function NewOutline({ onSelectUser }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: 'center', 
     alignItems: 'flex-end',
     padding: 20,
     right: 10,

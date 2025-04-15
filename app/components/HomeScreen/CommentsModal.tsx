@@ -96,9 +96,11 @@ export default function CommentsModal({
               {loading ? (
                 <Text>Loading comments...</Text>
               ) : comments.length === 0 ? (
-                <Text style={{ textAlign: "center", marginTop: 20 }}>
-                  No comments yet.
-                </Text>
+              <View style={styles.noComments}>
+                  <Text style={{ textAlign: "center", marginTop: 20 }}>
+                    No comments yet.
+                  </Text>
+              </View>
               ) : (
                 <FlatList
                   data={comments}
@@ -162,10 +164,11 @@ const styles = StyleSheet.create({
   list: {
     gap: 12,
     paddingBottom: 60,
+    flex:1,
   },
   comment: {
     paddingVertical: 8,
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: "#ffffff",
   },
   username: {
@@ -188,6 +191,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 25,
     fontSize: 16,
+  },
+  noComments:{
+    gap: 12,
+    paddingBottom: 60,
+    flex:1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   sendBtn: {
     marginLeft: 10,

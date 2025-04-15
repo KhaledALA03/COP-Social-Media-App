@@ -69,7 +69,7 @@ export default function DirectMessagesScreen() {
       <Text style={styles.title}>Chat with {recipientEmail}</Text>
 
       <FlatList
-        data={messages}
+        data={messages} 
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.messagesContainer}

@@ -15,7 +15,7 @@ export default function LoginScreen() {
 
   return (
     <DismissKeyboard>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}  testID="login-screen">
         <TopRightBlob />
         <BottomLeftBlob />
 

@@ -4,7 +4,7 @@ import Engagement from '../HomeScreen/Engagement';
 import Colors from '@/constants/Colors';
 import PostImage from '../HomeScreen/PostImage';
 import Header from '../ProfileScreen/Header';
-import PostCard from '../HomeScreen/PostCard';
+import PostCard from './PostCard';
 
 type PostsListProps = {
   data: any[];

@@ -8,7 +8,7 @@ type Message = {
   text: string;
   timestamp: number;
   sender: string;
-};
+}; 
 
 export default function Chats() {
   const [chatList, setChatList] = useState<any[]>([]);

@@ -6,10 +6,9 @@ import { useRouter } from 'expo-router';
 
 export default function ChatScreen() {
   const router = useRouter();
-
   const handleSelectUser = (chatId: string, email: string) => {
     router.push({
-      pathname: '/directmessages',
+      pathname: '/directmessages', 
       params: {
         chatId,
         recipientEmail: email,
@@ -18,7 +17,7 @@ export default function ChatScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}  testID='chat-screen'>
       <NewOutline onSelectUser={handleSelectUser} />
       <Chats />
     </View>

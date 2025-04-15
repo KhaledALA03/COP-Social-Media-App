@@ -32,7 +32,7 @@ export default function HomeScreen() {
     fetchPosts();
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={styles.container}  testID="home-screen">
       {loading ? (
         <ActivityIndicator size="large" color={Colors.primary100} />
       ) : (
