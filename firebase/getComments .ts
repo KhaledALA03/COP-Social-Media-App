@@ -14,7 +14,7 @@ export const getComments = async (postId: string): Promise<Comment[]> => {
         ...value,  
       }));
       
-      console.log(formattedComments)
+
       return formattedComments.reverse();  
     } else {
       return [];

@@ -37,7 +37,7 @@ export default function CreatePostModal({
       quality: 1,
     });
 
-    console.log(result);
+  
 
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
@@ -69,12 +69,12 @@ export default function CreatePostModal({
               numberOfLines={4}
               
             />
-      
+{/*       
             <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
               <Text style={styles.uploadText}>
                 {imageUri ? 'Change Image' : 'Upload Image'}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
       
             {imageUri && (
               <Image source={{ uri: imageUri }} style={styles.imagePreview} />

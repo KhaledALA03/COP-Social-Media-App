@@ -17,7 +17,6 @@ export default function UserPosts({ header }) {
     setLoading(true);
     const data = await getPosts();
     const userPosts = data.filter((post) => post.userId === user.uid);
-    console.log(userPosts);
     setPosts(userPosts);
     setLoading(false);
   };

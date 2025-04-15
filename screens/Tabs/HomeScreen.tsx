@@ -16,13 +16,13 @@ export default function HomeScreen() {
       console.log("🔄 Fetching posts...");
       setLoading(true);
       const data = await getPosts();
-      console.log("✅ Posts fetched:", data);
+      console.log("Posts fetched");
       setPosts(data);
     } catch (error) {
-      console.error("❌ fetchPosts error:", error);
+      console.error("fetchPosts error:", error);
     } finally {
       setLoading(false);
-      console.log("🔚 Loading complete");
+      console.log("Loading complete");
     
     }
   };
