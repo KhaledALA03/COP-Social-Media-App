@@ -6,7 +6,7 @@ import AuthInput from '../UI/AuthInput';
 import SubmitButton from '../UI/SubmitButton';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
-
+import * as Notifications from 'expo-notifications'
 
 
 interface LoginValues {
@@ -24,6 +24,33 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function LoginForm() {
+    const scheduleNotificationHandler = async () => {
+      await Notifications.cancelAllScheduledNotificationsAsync();
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Login Successful!",
+          body: "Welcome back!",
+        },
+        trigger: {
+          type: 'timeInterval',
+          seconds: 2,
+          repeats: false,
+        },
+      });
+      console.log("Notification scheduled");
+    };
+    
+    useEffect(() => {
+      const setupNotifications = async () => {
+        await Notifications.cancelAllScheduledNotificationsAsync(); 
+        const { status } = await Notifications.requestPermissionsAsync();
+        if (status !== 'granted') {
+          console.warn('🔒 Notification permission not granted.');
+        }
+      };
+      setupNotifications();
+    }, []);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const auth = FIREBASE_AUTH;
 
@@ -36,7 +63,7 @@ export default function LoginForm() {
     try {
       const response = await signInWithEmailAndPassword(auth, values.email, values.password);
       console.log("✅ Login success:", response.user.email);
-
+      scheduleNotificationHandler();
     } catch (error: any) {
       console.error('Login error:', error.code || error.message);
     } finally {

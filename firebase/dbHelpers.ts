@@ -1,4 +1,4 @@
-import { ref, set, push,update,get, child, increment } from 'firebase/database';
+import { ref, set, push,update,get, child, increment,remove} from 'firebase/database';
 import { FIREBASE_APP, FIREBASE_DB, FIREBASE_AUTH } from './FirebaseConfig';
 
 
@@ -137,3 +137,11 @@ export async function createComments(
 
 
 
+export async function deletePost(postId: string) {
+  try {
+    await remove(ref(FIREBASE_DB, `posts/${postId}`));
+    console.log('Post deleted from Firebase DB');
+  } catch (error) {
+    console.error('❌ Failed to delete post:', error);
+  }
+}

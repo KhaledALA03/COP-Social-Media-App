@@ -188,7 +188,7 @@ function CustomCenterButton({ onPress }: { onPress: () => void }) {
           name="add-outline"
           size={24}
           color="#fff"
-          style={{ transform: [{ rotate: '-45deg' }] }}
+          style={styles.rotatedIcon}
         />
       </View>
     </TouchableOpacity>
@@ -217,5 +217,8 @@ const styles = StyleSheet.create({
   },
   icon: {
     paddingTop: 5,
+  },
+  rotatedIcon: {
+    transform: [{ rotate: '-45deg' }],
   },
 });

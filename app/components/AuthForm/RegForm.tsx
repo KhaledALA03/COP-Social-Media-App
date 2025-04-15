@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -8,7 +8,15 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import { createUser } from '@/auth/auth';
 import { saveUserDetails } from '@/firebase/dbHelpers';
+import * as Notifications from 'expo-notifications'
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 interface RegValues {
   email: string;
@@ -29,6 +37,33 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function RegForm() {
+
+  const scheduleNotificationHandler = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Registration Successful!",
+        body: "Welcome to LinkUp!",
+      },
+      trigger: {
+        type: 'timeInterval',
+        seconds: 2,
+        repeats: false,
+      },
+    });
+    console.log("📨 Notification scheduled");
+  };
+  
+  useEffect(() => {
+    const setupNotifications = async () => {
+      await Notifications.cancelAllScheduledNotificationsAsync(); 
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== 'granted') {
+        console.warn('🔒 Notification permission not granted.');
+      }
+    };
+    setupNotifications();
+  }, []);
+  
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const auth = FIREBASE_AUTH;
 
@@ -49,7 +84,7 @@ export default function RegForm() {
       const { uid, email } = userCredential.user;
   
       await saveUserDetails(uid, email);
-  
+      scheduleNotificationHandler();
       console.log('✅ Signup and save successful');
     } catch (error) {
       console.error('❌ Signup error:', error);
