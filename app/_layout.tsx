@@ -46,7 +46,10 @@ export default function RootLayout() {
           name="directmessages"
           options={{ headerTitle:"chat"}}
         />
-        
+                <Stack.Screen
+          name="search"
+          options={{ headerTitle:"search"}}
+        />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, headerTitle:'Chats' }} />
         <Stack.Screen name="+not-found" />
       </Stack>

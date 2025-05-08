@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import LoginScreen from '@/screens/Auth/LoginScreen'
 import DissmissKeyboard from './components/utils/DismissKeyboard'
-export default function login() {
+export default function Login() {
   return (
   <DissmissKeyboard>
     <LoginScreen/>

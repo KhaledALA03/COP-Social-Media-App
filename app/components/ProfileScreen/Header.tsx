@@ -5,19 +5,21 @@ import Colors from '@/constants/Colors';
 const screenWidth = Dimensions.get('window').width;
 type HeaderProps = {
   posts: any[];
+  user?: {
+    email: string;
+  };
 };
 
-export default function Header({ posts }: HeaderProps) {
-  const user = FIREBASE_AUTH.currentUser;
-  const domain = user?.email?.split('@')[0] || 'user';
-  const email = user?.email || 'no@email.com';
+export default function Header({ posts, user }: HeaderProps) {
+  const currentUser = FIREBASE_AUTH.currentUser;
+  const email = user?.email || currentUser?.email || "unknown@email.com";
+  const domain = email.split("@")[0];
 
   return (
     <View style={styles.header}>
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>{domain.charAt(0).toUpperCase()}</Text>
       </View>
-
       <Text style={styles.username}>{`@${domain}`}</Text>
       <Text style={styles.email}>{email}</Text>
       <Text style={styles.postCount}>Posts: {posts.length}</Text>

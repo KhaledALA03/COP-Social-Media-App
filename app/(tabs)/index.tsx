@@ -4,7 +4,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from '@/firebase/FirebaseConfig';
 import { ref, update } from 'firebase/database';
 import { View,Text } from 'react-native';
 import HomeScreen from '@/screens/Tabs/HomeScreen';
-export default function index() {
+export default function Index() {
   useEffect(() => {
     const getToken = async () => {
       const token = await registerForPushNotificationsAsync();

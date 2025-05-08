@@ -11,7 +11,7 @@ const firebaseConfig = {
   storageBucket: 'cop-social-media-app-cf3c8.appspot.com',
   messagingSenderId: '821243500651',
   appId: '1:821243500651:web:82ce2b97c63bb0fb4d792e',
-  databaseURL: 'https://cop-social-media-app-cf3c8-default-rtdb.firebaseio.com', // ✅ Required for Realtime DB
+  databaseURL: 'https://cop-social-media-app-cf3c8-default-rtdb.firebaseio.com', 
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);
