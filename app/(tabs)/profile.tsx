@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
 import ProfileScreen from '@/screens/Tabs/ProfileScreen';
 
-export default function profile() {
+export default function Profile() {
   return (
     <ProfileScreen/>
   );
