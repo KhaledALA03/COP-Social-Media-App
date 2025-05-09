@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  TextInput,
 } from 'react-native';
 import { ref, get } from 'firebase/database';
 import { FIREBASE_DB, FIREBASE_AUTH } from '@/firebase/FirebaseConfig';
@@ -25,11 +26,20 @@ type User = {
 
 export default function NewChatModal({ visible, onClose, onSelectUser }: Props) {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     if (visible) fetchUsers();
   }, [visible]);
+
+  useEffect(() => {
+    const filtered = users.filter((u) =>
+      u.email.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchText, users]);
 
   const fetchUsers = async () => {
     try {
@@ -42,6 +52,7 @@ export default function NewChatModal({ visible, onClose, onSelectUser }: Props) 
           email: `@${data[uid].email.split('@')[0]}`,
         }));
         setUsers(parsed);
+        setFilteredUsers(parsed);
       }
     } catch (error) {
       console.error('❌ Failed to fetch users:', error);
@@ -60,19 +71,25 @@ export default function NewChatModal({ visible, onClose, onSelectUser }: Props) 
           </TouchableOpacity>
         </View>
 
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search users..."
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholderTextColor="#999"
+        />
+
         {loading ? (
           <ActivityIndicator size="large" style={{ marginTop: 20 }} />
         ) : (
           <FlatList
-            data={users}
+            data={filteredUsers}
             ListHeaderComponent={() => (
-              <Text style={{ fontSize: 18, marginBottom: 10, color: 'skyblue' }}>
-                Select a user to message
-              </Text>
+              <Text style={styles.selectText}>Select a user to message</Text>
             )}
             keyExtractor={(item) => item.uid}
             renderItem={({ item }) => (
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.userItem}
                 onPress={() => {
                   const currentUserId = FIREBASE_AUTH.currentUser?.uid;
@@ -106,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     paddingBottom: 10,
@@ -117,6 +134,21 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     padding: 4,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    fontSize: 16,
+    color: '#333',
+  },
+  selectText: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: 'skyblue',
   },
   userItem: {
     paddingVertical: 16,
